@@ -1,0 +1,12 @@
+{
+  "name": "pokemon-imgs-scrap",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/abnerfs/pokemon-imgs-scrap",
+  "author": "abnerfs <abnerfs@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "jsdom": "^15.1.1",
+    "request": "^2.88.0"
+  }
+}
