@@ -1,5 +1,5 @@
 # Pokemon Images
-A simple scrap script for pokemondb.net that downloads an image for every pokemon in pokedex. I did this because i needed, i hope this help someone else. If you just need the images I've uploaded a zip in the release section.
+A simple scrap script for pokemondb.net that downloads an image for every pokemon in pokedex. I hope this help someone, if you just need the images I've also uploaded a zip in the release section.
 
 # Usage
 - Download or clone de project
