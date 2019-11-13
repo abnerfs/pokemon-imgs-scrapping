@@ -31,6 +31,14 @@ const downloadImage = (url, dest) =>
             })
         }))
 
+const findBestImage = (pokeName, el) => {
+    for(const split of pokeName.split(' ')) 
+        if(el.innerHTML.toUpperCase().trim().indexOf(split.toUpperCase().trim()) == -1)
+            return false;
+            
+    return true;
+}
+
 async function getImages() {
     const url = baseUrl + `/pokedex/all`;
 
@@ -40,24 +48,32 @@ async function getImages() {
     const pokemons = dom.window.document.querySelectorAll('#pokedex > tbody > tr');
     console.log(pokemons.length);
     for (const pokemon of pokemons) {
-
         const urlPokemon = baseUrl + pokemon.querySelector('.ent-name').href;
-        const pokeName = urlPokemon.replace(baseUrl + "/pokedex/", "").capitalize();
+        const pokedexNumber = pokemon.querySelector('.infocard-cell-data').innerHTML;
+        let evolution = pokemon.querySelector('.text-muted');
+        let evolutionName = evolution ? evolution.innerHTML : "";
 
-        console.log(pokeName);
-        console.log(urlPokemon);
+        const pokeName = evolutionName || urlPokemon.replace(baseUrl + "/pokedex/", "").capitalize();
 
+        console.log(`#${pokedexNumber} - ${pokeName} (${urlPokemon})`);
         const pokePage = (await getBody(urlPokemon));
         const domPage = new JSDOM(pokePage).window.document;
-        const imgUrl = domPage.querySelector('img').src;
+
+
+        const imgSection = Array.prototype.slice.call(domPage.querySelectorAll('.tabs-tab') || []).find(x => findBestImage(pokeName, x));
+        let imgUrl = '';
+
+        if(imgSection) {
+            let sectionId = '#' + imgSection.href.split('#').slice(-1)[0];        
+            imgUrl = domPage.querySelector(sectionId)
+                                .querySelector('img')
+                                .src;
+        } else {
+            imgUrl = domPage.querySelector('img').src;
+        }
 
         const ext = path.extname(imgUrl);
-
-        const dest = `${DEST}${pokeName}${ext}`;
-
-        console.log(imgUrl);
-        console.log(dest);
-
+        const dest = `${DEST}${pokedexNumber}_${pokeName}${ext}`;
         await downloadImage(imgUrl, dest);
     }
 }
